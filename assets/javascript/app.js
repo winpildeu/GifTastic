@@ -93,6 +93,7 @@ $(function () {
         let userInput = $("#searchField").val();
         console.log(`Added button: ${userInput}`);
         pokedex.push(userInput);
+        $("#searchField").val("");
         displayButtons();
     });
 
