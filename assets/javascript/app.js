@@ -1,5 +1,5 @@
 const APIkey = "&api_key=fqmMfG2eW9wEWkZyz6RpzIhI9daBM4Rb&limit=10&rating=g";
-let pokedex = ["wartortle", "charizard", "mr. mime", "gengar", "psyduck", "meowth", "caterpie"];
+let pokedex = ["wartortle", "charizard", "gengar", "psyduck", "meowth", "caterpie"];
 
 // document ready shorthand
 $(function () {
@@ -37,28 +37,55 @@ $(function () {
             // Display the images
             for (let i = 0; i < result.length; i++) {
                 // save the title and URLs of the current image
-                let imgURL = result[i].images.fixed_height_still.url;
+                let stillImgURL = result[i].images.fixed_height_still.url;
+                let fluidImgURL = result[i].images.fixed_width.url;
                 let title = result[i].title;
                 let rating = result[i].rating
 
                 // Create the card to insert into the HTML page
                 let card = $("<div>");
-                card.addClass("card m-2").attr("style", "width: 18rem;");
+                card.addClass("card m-2");
                 let cardImg = $("<img>");
-                cardImg.addClass("card-img-top").attr("src", imgURL).attr("alt",title).attr("style", "width: 18rem;");
+                cardImg.addClass("card-img-top gif").attr("src", stillImgURL).attr("alt",title).attr("data-still", stillImgURL).attr("data-animate", fluidImgURL).attr("data-state", "still");
                 let cardBody = $("<div>");
-                cardBody.addClass("card-body");
+                cardBody.addClass("card-body bg-success");
                 let rated = $("<p>");
                 rated.addClass("card-text").text(`Rating: ${rating}`);
-                $("#images").prepend(card, cardImg, cardBody, rated);
+                card.append(cardImg);
+                card.append(cardBody);
+                cardBody.append(rated);
+                $("#images").prepend(card);
             }
         });
     }
 
+    function change() {
+        console.log("Gif clicked!");
+
+        // STEP TWO: make a variable named state and then store the image's data-state into it.
+        // Use the .attr() method for this.
+        let state = $(this).attr("data-state");
+
+        // STEP THREE: Check if the variable state is equal to 'still',
+        // then update the src attribute of this image to it's data-animate value,
+        // and update the data-state attribute to 'animate'.
+        if (state === "still") {
+            let animateURL = $(this).attr("data-animate");
+            $(this).attr("src", animateURL).attr("data-state", "animate");
+        }
+
+        // If state is equal to 'animate', then update the src attribute of this
+        // image to it's data-still value and update the data-state attribute to 'still'
+        if (state === 'animate') {
+            let stillURL = $(this).attr("data-still");
+            $(this).attr("src", stillURL).attr("data-state", "still");
+        }        
+    }
     // Events =====================================
 
-    // Add an onclick to all generated elements with a class of pokeButton
+    // Add an onclick to all generated elements with a class of pokeButton and gif
     $(document).on("click", ".pokeButton", giphySearch);
+    $(document).on("click", ".gif", change);
 
     // Adds a pokemon button to the list
     $("#searchButton").on("click", function () {
@@ -69,6 +96,10 @@ $(function () {
         displayButtons();
     });
 
+    $(".gif").on("click", function () {
+        console.log("Gif clicked!");
+    });
+    
     // Main code ==================================
 
     displayButtons();
