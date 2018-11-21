@@ -9,7 +9,7 @@ $(function () {
         $("#buttons").empty();
         for (let i = 0; i < pokedex.length; i++) {
             let newButton = $("<button>");
-            newButton.attr("type", "button").attr("data-name", pokedex[i]).addClass("btn btn-secondary pokeButton").text(`${pokedex[i]}`);
+            newButton.attr("type", "button").attr("data-name", pokedex[i]).addClass("btn btn-secondary pokeButton m-1 shadow-sm").text(`${pokedex[i]}`);
             $("#buttons").append(newButton);
         }
     }
